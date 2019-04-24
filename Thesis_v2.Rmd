@@ -1,0 +1,891 @@
+---
+output:
+  pdf_document: 
+   fig_caption: yes
+fontsize: 12pt
+
+header-includes: \usepackage{setspace}\doublespacing
+                 \usepackage{lscape}
+                 \usepackage{booktabs}
+                 \usepackage{rotating}
+                 \usepackage{dcolumn}
+                 \usepackage{float}
+                 
+                 
+bibliography: library.bib
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+```{r, include=FALSE, warning=FALSE}
+
+library(haven)
+library(easyGgplot2)
+library(Hmisc)
+library(dplyr)
+library(taRifx)
+library(ggplot2)
+library(scales)
+library(magrittr)
+library(RColorBrewer)
+library(memisc)
+library(sjPlot)
+library(plm)
+library(lmtest)
+library(captioner)
+library(pander)
+library(stargazer)
+library(sjPlot)
+library(kableExtra)
+library(qwraps2)
+options(qwraps2_markup = 'markdown')
+
+#analysis <- read.csv("C:/Users/169435/Dropbox/Hertie School of Governance/Semester 4/Thesis/Data/analysis.csv")
+
+analysis <-read.csv("C:/Users/WINDOWS-PC/Dropbox/Hertie School of Governance/Semester 4/Thesis/Data/analysis.csv")
+
+#wordcountaddin::text_stats("C:/Users/WINDOWS-PC/Dropbox/Hertie School of Governance/Semester 4/Thesis/Code/Thesis_v1.Rmd")
+
+```
+
+
+\newpage
+\tableofcontents
+
+\newpage
+
+\listoftables
+
+\newpage
+
+\listoffigures
+
+\newpage
+
+#Introduction
+
+Family structures and policies are receiving increasing attention in Europe these days, particularly in terms of answering questions such as individual life-course, work-life balance and the experience of parenthood. In particular, family forms in Europe are increasingly moving away from a standard "nuclear family" model (a household with a married heterosexual couple and their biological children) to a variety of lifestyles, including partnership with no children and homosexual partnerships [@euteneuer2011]. There is also an identifiable "crisis of matrimony" in present-day Europe, where factors such as increased labor force participation of women, widespread secularization of beliefs, education and emergence of feminist movements have contributed towards the weakening of the traditional "patriarchal" family model. Marriage rates in Europe have thus decreased with time, from 7.64 marriages per 1000 persons in 1965 to 4.87 in 2007 [@kreyenfeld2017]. Single-parent households are becoming increasingly common, particularly in Denmark, the United Kingdom and East Germany [@euteneuer2011]. 
+
+On the whole, family as an institution has undergone massive changes over the past decades in Europe, particularly in terms of postponement of the time of first childbirth and the age of first marriage. This has led to massive declines in rates of fertility and the perception of marriage as a "social institution" on the whole [@beier2010]. This weakening has been also supported by factors such as increased divorce rates and rates of re-marriages. A number of children in Europe today are born out of wedlock and interestingly countries with the highest ratios of out-of-wedlock births also display the highest fertility levels [@euteneuer2011]. 
+
+\newpage
+
+##Single parent households in Germany
+
+In the year 2015, there were 40.8 million households in Germany, which is projected to increase in the future. The majority of these households were single person households at 17 million, with only 10 million households or around 25% of the population having 3 persons or more [@destatis2017].
+
+Parental separation is an important reason for multiple households formation. In Germany, 162,397 couples divorced in the year 2016, with 51.3% of the applications for divorce filed by the wife [@destatis20172]. Of these couples, 81,396 have one or more common minor children, which represents around 50.4% of the sample [@destatis2018].
+
+Further, the share of newborn children whose parents are unmarried has more than doubled in the last 25 years, from 15% in 1990 to around 35% in the year 2015. The time-series of live births in Germany, by the marital status of the parents is outlined in the figure below [@destatis2016].
+
+
+```{r, echo=FALSE, out.width = "300px", fig.cap="Rate of live births in Germany by parents' marital status (Source: Destatis, 2016)"}
+knitr::include_graphics("livebirths.png")
+```
+
+
+\newpage
+
+##Adolescence - definition and policy relevance
+
+Adolescence, as defined by the World Health Organization, is one of the most rapid phases of human development, with significant health and socio-economic consequences over the individual's life course. Adolescence is a period of crucial physical, neurodevelopment, psychological and social changes in an individual which influences her risk-taking and health-related behaviors, attitudes towards work and family and other aspects of individual lifestyle. This period is typically defined as between 10 and 19 years of age with 3 stages [@WHO2010] as follows:
+
+**1. Early stage (10-15 years)**:	Characterized by physical changes such as rapid growth and appearance of secondary sexual characteristics, such as facial hair in males and breasts in females [^1]. The individual uses concrete thinking in terms of focusing on the present, as well as spends time thinking on her body image, with frequent mood changes. She also typically struggles with rules and can be argumentative or disobedient in the family setting. Peer groups play a vital role in this stage, which is characterized by intense friendships with the same sex.
+
+**2. Middle stage (14-17 years)**:	Characterized by advanced secondary sexual characteristics, as well as a slow down in growth, with adolescents reaching around 95% of adult growth during this stage. Developments in cognitive function, with significant improvement in problem solving skills and development of abstract thinking is also a key feature. In terms of psychological and social changes, individuals may think a lot about impractical or impossible dreams characterized by a feeling of power, and may also experiment with sex, drugs and other risk-involved activities. They may be argumentative with people in authority yet form strong peer friendships, with the peer group playing a crucial role in determining behavior.
+
+**3. Later stage (16-19 years)**:	Adolescents in this stage are physically mature and are usually more comfortable with their own body image. In terms of cognitive abilities, they are typically capable of abstract thinking and planning for the future. This phase is characterized by individual planning and following long-term goals and clearer ideas on personal morality and ethics. In terms of familial relationships, adolescents in this stage move from a child-parent/guardian relationship to a more "equal" adult-adult relationship. Individual decisions are also less influenced by the peer group and is more oriented towards individual friendships.
+
+
+Adolescent wellbeing is also highly dependent on other factors such as gender. For instance, research shows that girls are more likely to report lower levels of self-esteem, greater unhappiness, worries and higher levels of negative self-efficacy when compared to boys. Further, issues of self-esteem, self-efficacy and happiness are also more interconnected for girls than for boys, thus leading to a negative spiral in behavior where one event (such as a low grade or an unkind comment from someone about one's appearance) can create a feedback loop of negativity [@bergmanscott2001]. Understanding the key factors influencing adolescent wellbeing is thus important for two reasons: (a) understanding the individual's life course and (b) influencing national health and social policies targeted at better outcomes during the individual's life course.Section II provides more insight into the determinants of adolescent wellbeing, particularly the role of family structures and stability.
+
+##Adolescent wellbeing in the German context
+
+The mental health module of the German Health Interview and Examination Survey for Children and Adolescents (KiGGS), also called the BELLA study, provides important insights into adolescent wellbeing in Germany. The study surveys parents of 2,863 children and adolescents between the ages of 7 to 17  as well as 1,700 children and adolescents between the ages 11 to 17  In this study, the health related quality of life of children is assessed using the KINDL-R questionnaire [@ravenssieberer2008], which contains questions on physical and emotional wellbeing, self-esteem and relationship with family and friends. The presence of mental health problem symptoms was ascertained using the total problems score from the Strengths and Difficulties Questionnaire (SDQ), which is discussed in detail later in Section III of the thesis.
+
+On a scale of 0 to 100, with higher scores representing a greater quality of life, the parent reported KINDL-R total scores are around 76 on average for all the children and adolescents in the sample. Households of low socio-economic status and with a child between the ages 7 and 17 have a reported score of 75.4 on average, 1.6 percentage points lower than households with high socio-economic status. The study reveals that mental health problems are more likely to occur between the ages of 7 and 12 (i.e. in the early stages of adolescence) and after 19 years of age, with a high risk of persisting into adulthood [@who2008]. More importantly, 21.9% of the children and adolescents in the sample showed signs of mental health problems such as anxiety, depression and conduct problems. The main risk factors identified for the prevalence of mental health problems was an adverse family climate and low socio-economic status. Structural changes such as the transition from elementary school to secondary school, and subsequently working life or university may also contribute to these problems, as well as drug and alcohol abuse [@who2008].
+
+The rates of substance abuse among German youth is worth examining. Germany is one of the countries with the highest rates of daily smoking among 15 year old adolescents - of which 28.7% are girls. The rates of weekly drinking are also much higher, with 33% of adolescents in this age group being girls. Studies have shown that smoking and binge drinking on a regular basis cause more psychological problems among adolescents and reduce their overall quality of life [@who2008]. Further, mental health problems among adolescents has been shown to negatively impact other measures of physical health, represented in issues such as chronic pain and depression [@sieberer2015].
+
+
+##Research Hypotheses
+
+Given the special challenges inherent during adolescence, it is important to identify "vulnerable" groups and improve their health and social outcomes by examining the factors which may contribute to their vulnerability. In the light of the demographic changes  in family structures, it is particularly useful to understand how the institution of family affects adolescent wellbeing in contemporary Europe. This thesis focuses on the determinants of adolescent wellbeing in Germany, particularly in the light of parental separation and subsequent changes in family structures. Further, I seek to examine the gendered differences in adolescent wellbeing to parental separation, in line with @videon2002, who argues that opposite-sex parents have a significant influence on adolescent depression regardless of family form.
+
+The research hypotheses in the study are as follows:
+
+1. What is the impact of family structure in general, and parental separation in particular on adolescent well-being in contemporary Germany?
+
+    H0: Parental divorce has no significant impact on adolescent wellbeing 
+
+
+2. Are there significant gender differences in adolescent wellbeing after controlling for parent's marital status?
+
+    H0: There are no significant differences in adolescent wellbeing by gender, after controlling for   parent's marital status.
+
+
+[^1]: As defined by the Encylopedia Britannica. Link: <https://www.britannica.com/topic/human-behavior/Development-in-adolescence#ref39100>
+
+
+The rest of the thesis is structured as follows. **Section 2** outlines the key theoretical frameworks and literature on parental separation and adolescent wellbeing, disaggregated by gender. **Section 3** describes the data and methodology used in the analysis, while **Section 4** provides insight into the results from the descriptive and multivariate analyses. **Section 5** discusses the results of these analyses and its policy implications, and **Section 6** concludes.
+
+
+#II. Theoretical framework
+
+This section reviews the key theories on the impact of family structure and parental separation on adolescent wellbeing. It is divided into three parts. The first part discusses the changing nature of marriage as an institution, in particular, the increased rates of cohabitation without marriage among couples and greater acceptance of same-sex relationships in contemporary Western societies. The second part discusses the determinants of adolescent wellbeing, particularly its relationship to parenting styles and other structural factors such as access to economic resources. The third part outlines the theories on the relationship between parental separation and adolescent wellbeing over the life-course.
+
+##Changing nature of marriage as an institution
+
+@cherlin1978 was one of the early researchers in analyzing the institution of marriage and the ways in which it could break down. In particular, he argued that the divorce rates for remarriages that occur after a first divorce was increasing due to the 'incomplete institutionalization' of remarriage in the United States. This stems from a lack of "institutionalized guidelines" for solving marital problems, especially when children from a first marriage are involved. The changed nature of family members as stepparents and stepchildren leads to redefined social roles, with important implications for disciplining children and other child-rearing behavior.
+
+@cherlin2004 paints a more comprehensive picture of the deinstitutionalization of American marriage, which is driven by the weakening of social norms guiding partners' behavior over the past few decades. This deinstitutionalization has occurred due to two major transitions. The first is the transition from a "institutional marriage" framework (where marriage is defined as a social contract between two individuals with specific rules and roles) to a "companionate marriage" framework (where marriage is defined in terms of a relationship between two individuals and their individual goals). In the second framework, greater emphasis is given to individual development and personal choice, leading to more individualized marriages where partners decide on the framework that works best for them. This transition has been fueled by larger macroeconomic factors such as more women entering the labour market, which has led to a redefinition of the traditional roles of a male breadwinner and a female homemaker.
+The implications of these transitions is that over time, there has been a decline in the practical importance of marriage as an institution, but at the same time, the symbolic importance of marriage, which has now come to represent a form of personal achievement and status, has increased. This is especially valid among low-income individuals where marriage is seen a goal to be attained once both individuals are financially stable [@cherlin2004].
+
+The deinstitutionalization of marriage has also led to a variety of family structures, in particular, greater numbers of cohabiting couples and emergence of same-sex partnerships and marriages (ibid, 2004).  Cohabitation in particular is becoming increasingly accepted as an alternative to marriage. In European countries such as Sweden and Denmark, cohabitation has arguably become indistinguishable from the 'traditional' institution of marriage. Moreover, the pathway of cohabitation leading to marriage is also weakening, with the proportion of cohabiting couples who end up marrying each other within 3 years falling from 60% in the 1970s to around 33% in the 1990s [@cherlin2004]. 
+
+While Germany shares this trend of increased acceptance of cohabitation as a family form with other Western industrialized countries, there exists significant differences between East and West German societies in attitudes towards cohabitation. In the year 2012, 28.4% of all children born in West Germany were out of wedlock, while in East Germany, the share was 58.8% [@klarner2017]. Despite a common legal framework uniting both regions since 1990, there exists significant cultural norms and preferences regarding family formation. In particular, East Germany is characterized by more couples moving in together at a younger age, lesser number of cohabiting unions ending in marriage, and more children born  out of wedlock than that in West Germany.
+
+It is possible that cohabitation as a family form may become more institutionalized in the future. In the United States, some states offer cohabiting couples the same rights as that of married couples [@cherlin2004]. However in the German context, significant differences do remain in the legal status of married spouses when compared to cohabiting couples - in particular, the laws relating to property relations and financial obligations arising out of divorce do not apply to cohabiting couples [@gassen2015].
+
+
+##Determinants of adolescent wellbeing
+
+@shucksmith1995 provide an important starting point in examining the relationship between models of parenting and adolescent wellbeing, particularly in the stages of early to middle adolescence. The authors identify four distinct parenting styles characterized by different degrees of acceptance and control of adolescent behavior, which are as follows (ibid, 1995):
+  
+1. **Authoritarian**: characterized by high control (rigidly enforced rules) and low acceptance of individual behavior
+2. **Authoritative**: characterized by relatively medium control and acceptance of individual behavior - in terms of setting firm limits, but reasoning the logic behind such control with the adolescent and encouraging dialogue between the parent and the child
+3. **Permissive**: characterized by low levels of control, and
+4. **Neglectful**: characterized by low levels of control and low levels of acceptance.
+
+
+Using data from a longitudinal study on adolescent socialization in the United Kingdom, the authors find that the "permissive" style of parenting is the most common, comprising 38% of the sample, **but the most effective style in terms of better school integration and emotional well-being is an "authoritative" style of parenting**. Further, the authors find that adolescents from single-parent households are more likely to report relationship difficulties with their parents. "Neglectful" parenting styles are also more likely to be associated with both single-parent households and those with step-parents, which are likely to have significant implications for adolescent wellbeing. 
+
+@videon2002 examines the effects of parent-adolescent relationships and parental separation on adolescent wellbeing, particularly the gender-specific effects. The premise of this paper is that mothers and fathers are likely to have differential impacts on sons and daughters' wellbeing and thus the gender differences in response to parental separation is worth examining. There are two gender-specific effects highlighted in the paper: **One**, the impact of parental separation on boys as compared to girls and **Two**, the impact of living with a same-sex parent after marital dissolution on boys as compared to girls. The latter follows from social learning theories that a same-sex parent acts as a positive role model for the child to identify with, and is important for their healthy emotional development.
+
+In terms of the effect of parental separation across gender, prior research indicates that boys experience more negative consequences of parental separation than girls. However @videon2002 argues this could just be the case that girls typically "internalize" stressful situations, while boys "externalize" them through behavioral outbursts, thereby becoming overrepresented in clinical samples. Using data from the National Longitudinal Study of Adolescent Health in the United States, the author concludes that opposite-sex parents have a significant influence on adolescent depression, regardless of family structure.
+
+Examining the broader differences in adolescent wellbeing by gender, the general literature suggests that adolescent girls hold a less positive self concept and self-esteem when compared to adolescent boys. Adolescent girls were also more likely to define their identity through their relationships with other people than boys, leading to more sensitivity about how they are perceived by others [@bergmanscott2001]. Independent of age, boys are more likely to have a better body image, lesser anxiety and depression compared to girls. However, the mental wellbeing of adolescent girls is found to significantly improve with age, from adolescence to early adulthood [@gest].
+
+
+##Parental separation and adolescent wellbeing
+
+@cherlin1999 is one of the earliest researchers to examine the impact of growing up in a single-parent family on a child's wellbeing. Written in the context of the American society in the 1990s, where at the time 'about half of all marriages would end in divorce', he examines the arguments made that children of divorce have poorer wellbeing and subsequent life outcomes than those living with two biological parents. In particular, he looks into whether divorce, as opposed to other family problems cause lower wellbeing, and concludes that some of the problems faced by children post divorce arise from factors which existed even before the divorce process, such as problems inherent in dysfunctional families. 
+
+@amatoandcheadle2003 find evidence for a **strong intergenerational impact of divorce**, that is, divorce in the grandparent generation has significant impact on outcomes in the grandchild generation through transmission factors such as as lower education, greater marital discord and weaker ties with parents across generations. The intergenerational consequences of divorce particularly manifests in matters of socioeconomic status - where offspring of divorced parents are more likely to drop out of high school, less likely to attend college and more likely to experience unemployment later on. This can be attributed to factors such as lack of economic resources in single-parent households to provide for children's education and childhood stressors such as parental discord, moving houses and schools and exposure to new step-parents and newer families. Such factors can impede the children's ability to focus on school.
+
+Another intergenerational consequence of divorce is that of difficult parent-child relationships, with marital discord shown to erode children's ties with both parents [@amatoandcheadle2003]. This stems from attachment theories which posit that parent-child relationships form the basis of children's future relationships. Children with supportive parents are more emotionally secure, tend to trust people more and view other relationships positively. On the other hand, children with emotionally distant parents may grow up more distrustful of people and engage in behaviors such as avoiding commitment or nurturing jealousy towards partners, which may significantly impact the quality of their future relationships - especially in terms of deterioration of their own marriages. 
+In this light, divorced single mothers are also shown to demonstrate less warmth towards their children, mete out stricter punishments for deviant behavior and monitor their children's activities less closely. Further, divorced fathers may have restricted access to their children due to custodian visitation agreements, which may result in greater disengagement of fathers from their children's lives [@amatoandcheadle2003].
+
+@amato2014 also argues that the **speed of recovery from divorce as a major life stressor depends on individual access to resources**, which include adequate income, level of education, support from friends and family and support from new romantic partners. Although individual specific skills such as resilience and coping mechanisms also play an important role, the effect of these resources cannot be denied, especially in the development of younger children and adolescents. To reduce the negative impact of divorce on child wellbeing, it is important that resources and protective factors are in place - such as ensuring that the standard of living of the family does not fall significantly post-divorce, and that both parents adjust well to the divorce [@amato2014]. Consistent with @shucksmith1995, an authoritative style of parenting is also shown to produce best results in children's wellbeing. But the most important takeaway from @amato2014's research is the importance of ensuring stability in children's lives -- by not involving children in parental disputes, by not changing the external environments of the child (schools and neighbourhoods) too much and by not introducing new romantic partners to the children too soon. **Ensuring stability in the household is an important factor in determining the child's response to divorce**, and has significant consequences for children's wellbeing.
+
+@thomsonandmclanahan1994 investigate the importance of two types of parental resources - money and time - in informing children's academic development and socioeconomic wellbeing. The authors find that the difference in economic resources between single parent households and married parent households is much more significant in informing children's wellbeing than parenting differences between the two household types. @thomsonandmclanahan2012 investigate further the outcomes of children belonging to cohabiting families and find that the former possess greater economic disadvantage and provide lower quality parenting environments than married biological parents. Cohabiting biological parents are also shown to be more likely to separate than married parents, but paradoxically children of such separation seem to experience lesser negative effects than those whose married parents divorce. 
+
+The authors also echo @amato2014's findings on the role of family stability in determining children's wellbeing. While early research on the subject demonstrates that most families adjust to divorce after a year and a half [@thomsonandmclanahan2012], frequent transitions in family structures is associated with lower quality parenting and lower children's wellbeing.
+
+In this regard, it is also important to consider the role of step-siblings in children's wellbeing. Greater family complexity is shown to have negative outcomes for children's wellbeing, especially when associated with lower levels of paternal involvement in terms of time and money [@thomsonandmclanahan2012]. 
+
+The larger social and macroeconomic context plays an important role in determining children's wellbeing in single parent households. For instance, the welfare state regimes in Nordic countries ensures greater assistance provided to single mothers in terms of child allowances and access to subsidized child care. However, research shows that family structure plays a very significant role in influencing children's wellbeing even in a welfare state context, with children of single mothers having fewer material resources and reporting poorer health outcomes than those living with two biological parents  [@thomsonandmclanahan2012]. 
+
+
+Turning to  the German context, @walper2015 examine the effect of parental separation on adolescent wellbeing using longitudinal data from the German Family Panel, or pairfam. The authors compared the differences in adolescent wellbeing (measured in terms of adolescent satisfaction across education, family and general life satisfaction, and self esteem) in "stable nuclear families" as compared to single mother families and stepfather families. The results from this study show relatively lower well-being of adolescents in single mother families as compared to nuclear families. Adolescents in stepfather families report similar levels of wellbeing as those in nuclear families, but with decreased family satisfaction over time. Further, infrequent contact with the non-resident father had no impact on adolescent wellbeing.
+
+
+
+#III. Data and Methodology
+
+In this analysis, I seek to examine the measures and drivers of adolescent wellbeing in contemporary Germany. In particular, I am interested in developing a multi-faceted approach to adolescent wellbeing, by using self-reported measures of wellbeing in conjunction with other variables such as parent's marital status, level of education, ethnicity and reported level of economic satisfaction.
+
+For this analysis, I use data from the German Family Panel pairfam ("Panel Analysis of Intimate Relationships and Family Dynamics"), a multi-disciplinary longitudinal study researching partnerships and family dynamics in Germany [@bruderl2015german]. The main focus of the study involves partnerships (meeting potential partners, living in intimate relationships and separation), parenthood (decisions to have children, sexuality and contraceptive behavior), parenting and child development (parenting goals and parent-child relationships) and intergenerational relationships, with particular emphasis on the social embeddedness of these processes [@pairfam2018].
+
+The pairfam study follows a "multi-actor" design, which means that interviews are conducted among anchor persons, as well as their partners, parents and children. The study was first launched in the year 2008-09 with a sample of 12,402 anchor persons [@huinink2011panel], and has currently completed its eighth wave (2015-2016). 
+
+In this paper, I analyze data from the Anchor and Child surveys of waves 2 to 8 of the pairfam study. Wave 1 was not included in this analysis, as the necessary measures of adolescent wellbeing, described in the following section, were not incorporated in this survey. 
+
+
+## Description of variables
+
+### Measuring adolescent wellbeing - the Strengths and Difficulties Questionnaire (SDQ)
+
+The Strengths and Difficulties Questionnaire (SDQ henceforth) is a behavioral screening questionnaire for children between 4 and 16 years of age, developed by the child psychiatrist Robert Goodman [@goodman1997]. The questionnaire consists of around 25 items divided into 5 scales as follows:
+
+1. Emotional symptoms (5 items)
+2. Conduct problems (5 items)
+3. Hyperactivity/inattention (5 items)
+4. Peer relationship problems (5 items)
+5. Prosocial behavior (5 items)
+
+The scores on scales 1-4 are added to generate a total difficulties score, with higher scores indicating greater underlying psychological issues. In particular, a score of 6 and above on the self-completed Emotional symptoms scale indicates borderline symptoms, while a score of 7 and above indicates abnormal symptoms. On the self-completed Conduct problems scale, a score of 4 and above indicates borderline symptoms, while a score of 5 and above indicates abnormal symptoms [@sdqscoring2016]. The questionnaire can be completed by the child or by a parent or teacher of the child and is available online for download [@sdq2018]. The complete questionnaire and scoring tool is given in the Appendix.
+
+Overall the SDQ has been shown to have satisfactory internal consistency and reliability, particularly when administered to the parent or teacher of the child [@stoneetal2010]. The five scales of the SDQ are also explicitly incorporated into the pairfam child surveys, with the scales "Emotional symptoms", "Conduct problems" and "Pro-social behavior" incorporated in waves 2 to 8, and the scales "Hyperactivity/inattention" and "Peer relationship problems" incorporates in waves 2, 5 and 7. In the pairfam, the response format of the SDQ ranges from 0: Not true to 2: Certainly true. Thus the highest possible score in each scale is 10, with the lowest possible score being 0.
+
+In this analysis, I focus on two scales: "Emotional symptoms" and "Conduct problems". This is because data for these two scales are available across waves 2-8 of pairfam. Figure 2 outlines the overall distribution of the Emotional symptoms scale, while  Figure 3 outlines the overall distribution of the Conduct problems scales.
+
+```{r echo=FALSE, fig.cap="Emotional symptoms scale - overall distribution among surveyed adolescents ", fig.pos="H", out.width="400px"}
+f1 <- ggplot(analysis, aes(x=cemotion1)) + geom_histogram(fill="maroon", bins=20) + scale_x_continuous(expand = c(0,0), limits=c(0,10)) + scale_y_continuous(expand=c(0,0)) + labs(caption="Source: Waves 2-8 of pairfam") 
+f1
+```
+
+```{r echo=FALSE, fig.cap="Conduct problems scale - overall distribution among surveyed adolescents", fig.pos="H", out.width="400px"}
+f2 <- ggplot(analysis, aes(x=cconduct1)) + geom_histogram(fill="maroon", bins=20) + scale_x_continuous(expand = c(0,0), limits=c(0,10)) + scale_y_continuous(expand=c(0,0)) + labs(caption="Source: Waves 2-8 of pairfam") 
+f2
+```
+
+
+The mean score on the Emotional symptoms scale on the whole is `r round(mean(analysis$cemotion1),2)` with a standard deviation of `r round(sd(analysis$cemotion1),2)`. In the sample, `r round(100*length(which(analysis$cemotion1 == 6)) / length(analysis$cemotion1),2)`% of adolescents demonstrate borderline emotional symptoms, while `r round(100*length(which(analysis$cemotion1 > 6)) / length(analysis$cemotion1),2)`% demonstrate abnormal emotional symptoms.
+
+On the Conduct problems scale, the mean score overall is `r round(mean(analysis$cconduct1),2)` with a standard deviation of `r round(sd(analysis$cconduct1),2)`. In the sample, `r round(100*length(which(analysis$cconduct1 == 4)) / length(analysis$cconduct1),2)`% of adolescents demonstrate borderline emotional symptoms, while `r round(100*length(which(analysis$cconduct1 > 4)) / length(analysis$cconduct1),2)`% demonstrate abnormal emotional symptoms. 
+
+Figure 4 outlines the percentage of adolescents reporting borderline or abnormal symptoms on the Emotional symptoms scale across waves, while Figure 5 outlines the same for the Conduct problems scales. On the Emotional symptoms scale, girls consistently obtain higher scores across all waves, while on the Conduct problems scale, boys consistently obtain higher scores across all waves.
+
+```{r, echo=FALSE, fig.pos="H", fig.cap="Percentage of total adolescents with borderline and abnormal symptoms on the Emotional symptoms scale", out.width="350px"}
+bor <- analysis %>% 
+group_by(wave, csex.f) %>% 
+summarize(countbor = 100*(length(which(cemotion1>=6))/length(cemotion1)))
+
+f3 <- ggplot(bor, aes(x=as.factor(wave), y=countbor))+ geom_bar(stat="identity", aes(fill=csex.f), position="dodge") + scale_y_continuous(expand=c(0,0), limits=c(0,100)) +xlab("Wave")+ylab("Percentage") + labs(caption="Source:Waves 2-8 of pairfam") + geom_text( aes(x = as.factor(wave), y = countbor, label = sprintf('%.1f',countbor), group = csex.f), position = position_dodge(width = 1), vjust = -0.5, size = 4) + scale_fill_manual("csex.f", values = c("Boy" = "paleturquoise4", "Girl" = "palevioletred3")) 
+
+f3
+```
+
+\newpage
+
+```{r, echo=FALSE, fig.pos="H", fig.cap="Percentage of total adolescents with borderline and abnormal symptoms on the Conduct problems scale", out.width="350px", fig.pos="t"}
+
+bor2 <- analysis %>%  
+group_by(wave, csex.f) %>% 
+summarize(countbor1 = 100*(length(which(cconduct1>=4))/length(cconduct1)))
+
+f4 <- ggplot(bor2, aes(x=as.factor(wave), y=countbor1))+ geom_bar(stat="identity", aes(fill=csex.f), position="dodge") + scale_y_continuous(expand=c(0,0), limits=c(0,100)) +xlab("Wave")+ylab("Percentage") + labs(caption="Source:Waves 2-8 of pairfam") + geom_text( aes(x = as.factor(wave), y = countbor1, label = sprintf('%.1f',countbor1), group = csex.f), position = position_dodge(width = 1), vjust = -0.5, size = 4) + scale_fill_manual("csex.f", values = c("Boy" = "paleturquoise4", "Girl" = "palevioletred3")) 
+
+f4
+```
+
+### Control variables
+
+The dataset after cleaning (dropping observations with missing values) contains `r count(analysis)` observations across 7 waves. The number of observations by wave is given in Table 1.
+
+```{r, echo=FALSE, results='asis'}
+tab <- table(analysis$wave)
+kable(tab, caption="Number of observations per wave", col.names = c("Wave", "Number of observations"), format="latex")
+```
+
+Table 2 (in the next page) describes the nature of the covariates used in the analysis.
+
+
+
+\newpage
+
+\begin{landscape}
+\begin{table}[]
+\centering
+\caption{List of covariates used in the analysis}
+\label{my-label}
+\begin{tabular}{llll}
+\hline
+Variable name & Variable description & Variable type & Categories(if categorical) \\ \hline
+csex & Gender of the adolescent respondent & Categorical & \begin{tabular}[c]{@{}l@{}}1 if "Junge" (Boy)\\ 2 if "Maedchen" (Girl)\end{tabular} \\ \hline
+cdoby.f & Year of birth of the adolescent respondent & Categorical & 1994,1995,1996...2007 \\ \hline
+anchor\_inc28.f & Anchor reported satisfaction with household income & Categorical & \begin{tabular}[c]{@{}l@{}}ranges from 0-10:\\ 0: very dissatisfied\\ 10: very satisfied\end{tabular} \\ \hline
+anchor\_marstat.f & Anchor's marital status & Categorical & \begin{tabular}[c]{@{}l@{}}Divorced\\ Married/Civil union\\ Never married\\ Widowed\end{tabular} \\ \hline
+anchor\_mardummy.f & Dummy of anchor's marital status & Categorical & \begin{tabular}[c]{@{}l@{}}Married\\ Not Married\end{tabular} \\ \hline
+anchor\_ethni.f & Anchor's ethnicity & Categorical & \begin{tabular}[c]{@{}l@{}}1: German native, no migration background\\ 2: Ethnic-German Immigrant (Aussiedler)\\ 3: Half-German\\ 4: Turkish background\\ 5: Other non-German background\end{tabular} \\ \hline
+anchor\_yeduc & Years of education of the anchor & Continuous &  \\ \hline
+anchor\_eastwest.f & Residence of the anchor (in East or West Germany) & Categorical & \begin{tabular}[c]{@{}l@{}}East\\ West\end{tabular} \\ \hline
+\end{tabular}
+\end{table}
+\end{landscape}
+
+
+## Methodology
+In this study, I perform multivariate regressions to examine the impact of parent's marital status and adolescent gender on adolescent wellbeing across time. In particular, I conduct Pooled OLS and Fixed Effects Modeling in order to look into the between-subject and the within-subject variations respectively. The models estimated in the analysis are discussed further in detail in the next section.
+
+
+### Pooled OLS
+
+In this technique, the observations of each time period are modeled as if they were independent of each other, that is, the time dimension is ignored. Using independently pooled cross-sections (where the samples are randomly drawn at each time period) has the advantage of an increased sample size, more precise estimators and test statistics with more power, as compared to a single cross-sectional model [@wooldridge2012]. This also requires that the relationship between the dependent variable and at least some of the explanatory variables be constant over time.Pooled cross sectional models are especially useful in evaluating the impact of a certain policy intervention, by examining the outcome variables before and after the intervention. However, the pooled OLS model also assumes that there are no time-invariant unobserved characteristics present in the model, which can bias the coefficients obtained.
+
+
+I run two models under this technique, which are as follows [-@stargazer]:
+
+**Model 1 - Pooled OLS model (overall) with cemotion1 as dependent variable**:
+
+$cemotion1_i = \alpha + \beta_1csex.f_i + \beta_2cdoby.f_i + \beta_3anchor\_inc28_.f_i + \beta_4anchor\_marstat_.f_i + \beta_5anchor\_ethni_.f_i + \beta_6anchor\_yeduc_i + \beta_7anchor\_eastwest.f_i + \epsilon_i$
+
+for i= 1...n
+
+**Model 2 - Pooled OLS model (overall) with cconduct1 as dependent variable**:
+
+$cconduct1_i =  \alpha + \beta_1csex.f_i + \beta_2cdoby.f_i + \beta_3anchor\_inc28_.f_i + \beta_4anchor\_marstat_.f_i + \beta_5anchor\_ethni_.f_i + \beta_6anchor\_yeduc_i + \beta_7anchor\_eastwest.f_i + \epsilon_i$
+
+
+for i= 1...n
+
+### Fixed effects
+
+Fixed effects modeling allows one to control for unobserved time-invariant individual heterogeneity, with focus on within-observation variation. For instance, consider the following model [@wooldridge2012]:
+
+$y_{it} = \beta_1x_{it} + a_i + \epsilon_{it}$ (1)
+for i = 1,2,...,n and t=1,2,...T
+
+Averaging this model over time for each _i_, we get
+
+$\bar{y}_i = \beta_1\bar{x}_i + a_i + \epsilon_{i}$ (2)
+
+Subtracting (2) from (1), we get
+
+$y_{it} - \bar{y}_i = \beta_1(x_{it} - \bar{x}_i) + \epsilon_{it} - \epsilon_{i}$
+
+This is a form of time-demeaning of $y_{it}$ and similarly $x_{it}$ and $\epsilon_{it}$. In this process, the time-constant individual heterogeneity $a_i$ is eliminated from the regression analysis. The fixed effects estimator is also unbiased under a strict exogeneity assumption on the explanatory variables, that is, the idiosyncratic error term $\epsilon_{it}$ is uncorrelated with each explanatory variable across all the time periods [@wooldridge2012].
+
+The fixed effects model is not effective in estimating the effect of time-invariant explanatory variables on the dependent variable, due to the transformation outlined above. Most of the explanatory variables in this analysis, such as adolescent gender, anchor parents' ethnicity, level of education and residence are largely time-invariant. Therefore, in the Fixed Effects analysis, I seek to examine the effect of _change_ in marital status on adolescent wellbeing - the change being measured by a marital dummy variable, which takes two values: "Married" and "Not married".
+
+
+I run the following models using the fixed effects technique:
+
+**Model 3 - Fixed effects model (overall) with cemotion1 as dependent variable **:
+
+$cemotion1_{it} = \alpha_i + \beta_1csex.f_{it} + \beta_2cdoby.f_{it} + \beta_3anchor\_inc28.f_{it} + \beta_4anchor\_mardummy.f_{it} + \beta_5anchor\_ethni.f_{it} + \beta_6anchor\_yeduc_{it} + \beta_7anchor\_eastwest.f_{it} + \epsilon_{it}$
+
+for i= 1...n, t=2,3..8
+
+**Model 4 - Fixed effects model (overall) with cconduct1 as dependent variable**:
+
+$cconduct1_{it} = \alpha_i + \beta_1csex.f_{it} + \beta_2cdoby.f_{it} + \beta_3anchor\_inc28.f_{it} + \beta_4anchor\_mardummy.f_{it} + \beta_5anchor\_ethni.f_{it} + \beta_6anchor\_yeduc_{it} + \beta_7anchor\_eastwest.f_{it} + \epsilon_{it}$
+
+for i = 1...n, t=2,3..8
+
+**Model 5 - Fixed effects model for male adolescents with cemotion1 as dependent variable**
+
+$cemotion1_{it} = \alpha_i  + \beta_1cdoby.f_{it} + \beta_2anchor\_inc28.f_{it} + \beta_3anchor\_mardummy.f_{it} + \beta_4anchor\_ethni.f_{it} + \beta_5anchor\_yeduc_{it} + \beta_6anchor\_eastwest.f_{it} + \epsilon_{it}$
+
+for i= 1...n, t=2,3..8 and csex == "Male"
+
+**Model 6 - Fixed effects model for female adolescents with cemotion1 as dependent variable**
+
+$cemotion1_{it} = \alpha_i  + \beta_1cdoby.f_{it} + \beta_2anchor\_inc28.f_{it} + \beta_3anchor\_mardummy.f_{it} + \beta_4anchor\_ethni.f_{it} + \beta_5anchor\_yeduc_{it} + \beta_6anchor\_eastwest.f_{it} + \epsilon_{it}$
+
+for i= 1...n, t=2,3..8 and csex == "Female"
+
+**Model 7 - Fixed effects model for male adolescents with cconduct1 as dependent variable**:
+
+$cconduct1_{it} = \alpha_i  + \beta_1cdoby.f_{it} + \beta_2anchor\_inc28.f_{it} + \beta_3anchor\_mardummy.f_{it} + \beta_4anchor\_ethni.f_{it} + \beta_5anchor\_yeduc_{it} + \beta_6anchor\_eastwest.f_{it} + \epsilon_{it}$
+
+for i= 1...n, t=2,3..8 and csex == "Male"
+
+**Model 8 - Fixed effects model for female adolescents with cconduct1 as dependent variable**
+
+$cconduct1_{it} = \alpha_i  + \beta_1cdoby.f_{it} + \beta_2anchor\_inc28.f_{it} + \beta_3anchor\_mardummy.f_{it} + \beta_4anchor\_ethni.f_{it} + \beta_5anchor\_yeduc_{it} + \beta_6anchor\_eastwest.f_{it} + \epsilon_{it}$
+
+for i= 1...n, t=2,3..8 and csex == "Female"
+
+
+###Clustered standard errors
+
+In both the Pooled OLS and Fixed effects models, I use cluster-robust standard errors, the results of which are also presented in the regression output. This is necessary in panel data models, where the error term is likely to contain an individual-specific component that could be correlated across time, for instance the error term of individual $i$ in time $s$,  $e_{is}$ is likely to be correlated with the error term of individual $i$ in time $t$, $e_{it}$, as both contain the same $e_i$. In R, I adjust for clustered standard errors using the following command
+
+```{r, eval=FALSE}
+coeftest(model1, vcov=vcovHC(model1,cluster="group"))
+```
+
+\newpage
+
+#IV.Analysis
+
+In this section, I analyze the patterns of distribution of the key variables of interest, in particular the distribution of adolescent wellbeing across waves and by parent and adolescent specific characteristics. First, I conduct disaggregated visualization analyses of the relationships between adolescent gender, parent's marital status and wellbeing as measured by the Emotional symptoms and Conduct problems scale. Second, I perform regression analyses using Pooled OLS and Fixed Effects modeling to understand the causal relationship between parent's marital status and adolescent wellbeing across time, disaggregated by gender.
+
+
+##Descriptive analysis
+
+Table 3 outlines the summary statistics of the main variables used in the analysis.
+```{r, include=FALSE, warning=FALSE}
+#analysisstat <- dplyr::select(analysis, cemotion1, cconduct1, csex.f, cdoby.f, anchor_inc28.f, #anchor_marstat.f, anchor_mardummy.f, anchor_eastwest.f, anchor_yeduc, anchor_ethni.f)
+#landscape(knitr::kable(summary(analysisstat), "latex"))
+
+coolsummary <-
+  list("Emotional symptoms scale" =
+       list("Min" = ~ min(cemotion1),
+            "Max" = ~ max(cemotion1),
+            "Mean (sd)" = ~ qwraps2::mean_sd(cemotion1)),
+       "Conduct problems scale" =
+       list("Min" = ~ min(cconduct1),
+            "Max" = ~ max(cconduct1),
+            "Mean (sd)" = ~ qwraps2::mean_sd(cconduct1)),
+       "Gender of the adolescent respondent" =
+       list("Male" = ~ qwraps2::n_perc(csex.f == "Boy"),
+            "Female"  = ~ qwraps2::n_perc(csex.f == "Girl")),
+        "Year of birth of the adolescent respondent" =
+       list("Min" = ~ min(cdoby.f),
+            "Max"  = ~ max(cdoby.f)),
+       "Anchor reported satisfaction with household income" =
+       list("Min" = ~ min(anchor_inc28.f),
+            "Max"  = ~ max(anchor_inc28.f),
+            "Mean(sd)" = ~ qwraps2::mean_sd(anchor_inc28.f)),
+       "Anchor's marital status" =
+       list("Divorced" = ~ qwraps2::n_perc(anchor_marstat.f=="Divorced"),
+            "Married/civil union" = ~ qwraps2::n_perc(anchor_marstat.f=="Married/civil union"),
+            "Never married" = ~ qwraps2::n_perc(anchor_marstat.f=="Never married"),
+            "Widowed" = ~ qwraps2::n_perc(anchor_marstat.f=="Widowed")),
+       "Dummy of Anchor's marital status" =
+       list("Married" = ~ qwraps2::n_perc(anchor_mardummy.f=="Married"),
+            "Not married"  = ~ qwraps2::n_perc(anchor_mardummy.f=="Not Married")),
+        "Residence of anchor" =
+       list("East Germany" = ~ qwraps2::n_perc(anchor_eastwest.f=="East", na_rm=TRUE),
+            "West Germany"  = ~ qwraps2::n_perc(anchor_eastwest.f=="West", na_rm=TRUE)),
+      "Anchor's level of education (in years)" =
+       list("Min" = ~ min(anchor_yeduc),
+            "Max" = ~ max(anchor_yeduc),
+            "Mean (sd)" = ~ qwraps2::mean_sd(anchor_yeduc)),
+       "Anchor' ethnicity" =
+       list("German native" = ~ qwraps2::n_perc(anchor_ethni.f=="German native"),
+            "Ethnic German immigrant (Aussiedler)"  = ~ qwraps2::n_perc(anchor_ethni.f=="Ethnic German immigrant (Aussiedler)"),
+            "Half German" = ~ qwraps2::n_perc(anchor_ethni.f=="Half German"),
+            "Turkish background" = ~ qwraps2::n_perc(anchor_ethni.f=="Turkish background"),
+            "Other non-German background" = ~ qwraps2::n_perc(anchor_ethni.f=="Other non-German background"))
+       )
+
+summary_table(analysis, coolsummary)
+        
+
+```
+
+
+\begin{sidewaystable}
+\centering
+\caption{Summary statistics of variables used in the analysis}
+\begin{tabular}{ll} 
+\hline
+\textbf{Variable name} & \textbf{(N = 8186)} \\ 
+\hline
+\textbf{Emotional symptoms scale } &  \\
+Min & 0 \\
+Max & 10 \\
+Mean (sd) & 2.59 (+/- 1.99) \\ 
+\hline
+\textbf{Conduct problems scale } &  \\
+~Min & 0 \\
+Max & 10 \\
+Mean (sd) & 1.63 (+/- 1.42) \\ 
+\hline
+\textbf{Gender of the adolescent respondent } &  \\
+Male & 4,240 (51.80\%) \\
+Female & 3,946 (48.20\%) \\ 
+\hline
+\textbf{Year of birth of the adolescent respondent } &  \\
+Min & 1994 \\
+Max & 2007 \\ 
+\hline
+\textbf{Anchor reported satisfaction with household income } &  \\
+Min & 0 \\
+Max & 10 \\
+Mean(sd) & 6.12 (+/- 2.51) \\ 
+\hline
+\textbf{Anchor's marital status } &  \\
+Divorced & 727 (8.88\%) \\
+Married/civil union & 6,489 (79.27\%) \\
+Never married & 927 (11.32\%) \\
+Widowed & 43 (0.53\%) \\ 
+\hline
+\textbf{Dummy of Anchor's marital status } &  \\
+Married & 6,489 (79.27\%) \\
+Not married & 1,697 (20.73\%) \\ 
+\hline
+\textbf{Residence of anchor } &  \\
+East Germany & 1,803 (24.48\%) \\
+West Germany & 5,563 (75.52\%) \\ 
+\hline
+\textbf{Anchor's level of education (in years) } &  \\
+Min & 8 \\
+Max & 20 \\
+Mean (sd) & 13.04 (+/- 2.92) \\ 
+\hline
+\textbf{Anchor' ethnicity } &  \\
+German native & 6,442 (78.70\%) \\
+Ethnic German immigrant (Aussiedler) & 283 (3.46\%) \\
+Half German & 493 (6.02\%) \\
+Turkish background & 263 (3.21\%) \\
+Other non-German background & 705 (8.61\%) \\
+\hline
+\end{tabular}
+\end{sidewaystable}
+
+
+On the whole `r round(100*length(which(analysis$csex.f == "Boy")) / length(analysis$csex.f),2)`% of the entire sample consists of adolescent males. `r round(100*length(which(analysis$anchor_marstat.f == "Married/civil union")) / length(analysis$anchor_marstat.f),2)` % of the anchor parents of the adolescents are married, with `r round(100*length(which(analysis$anchor_marstat.f == "Never married")) / length(analysis$anchor_marstat.f),2)`% having never married and `r round(100*length(which(analysis$anchor_marstat.f == "Divorced")) / length(analysis$anchor_marstat.f),2)`% reporting being divorced.
+
+In terms of residence, `r round(100*length(which(analysis$anchor_eastwest.f == "East")) / length(analysis$anchor_eastwest.f),2)`% live in the former East Germany. `r round(100*length(which(analysis$anchor_ethni.f == "German native")) / length(analysis$anchor_ethni.f),2)`% of the anchors are German natives, with no immigration background, while `r round(100*length(which(analysis$anchor_ethni.f == "Turkish background"|analysis$anchor_ethni.f=="Other non-German background")) / length(analysis$anchor_ethni.f),2)`% of the anchors come from a Turkish or other non-German background.
+
+On the whole, the anchor parents of the adolescents have an average of `r round(mean(analysis$anchor_yeduc),2)` years of education, and report on average of `r round(mean(analysis$anchor_inc28.f),2)` on satisfaction with the level of household income, with 10 being the highest level of satisfaction.
+
+\newpage
+
+###Distribution of adolescent wellbeing across waves 
+
+The average score on the Emotional symptoms scale across all waves is `r round(mean(analysis$cemotion1),2)` with a standard deviation of `r round(sd(analysis$cemotion1),2)`. On the Conduct problems scale, the average score is `r round(mean(analysis$cconduct1),2)` with a standard deviation of `r round(sd(analysis$cconduct1),2)`. Figures 6 and 7 outline the average scores on both scales across waves. In both scales, the highest score on average is obtained in Wave 2, and the lowest score on average is obtained in Wave 7.
+
+```{r, echo=FALSE,fig.align="left", fig.pos="H", fig.cap="Distribution of average scores on the Emotional symptoms scale across waves"}
+meancemotion1 <- analysis %>% 
+  group_by(wave) %>% 
+  summarize(meancemotion = mean(cemotion1))
+
+f5 <- ggplot(meancemotion1, aes(x=as.factor(wave), y=meancemotion))+geom_bar(stat="identity", fill="maroon") + scale_y_continuous(expand=c(0,0), limits=c(0,10)) +xlab("Wave")+ylab("Average score") +labs(caption="Source:Waves 2-8 of pairfam") + geom_text(aes(label=sprintf('%.1f', meancemotion)), vjust=-0.75) 
+
+f5
+
+```
+
+```{r, echo=FALSE,fig.align="left", fig.pos="H", fig.cap="Distribution of average scores on the Conduct problems scale across waves"}
+
+meanconduct1 <- analysis %>% 
+  group_by(wave) %>% 
+  summarize(meanconduct = mean(cconduct1))
+
+f6 <- ggplot(meanconduct1, aes(x=as.factor(wave), y=meanconduct))+geom_bar(stat="identity", fill="maroon") + scale_y_continuous(expand=c(0,0), limits=c(0,10)) +xlab("Wave")+ylab("Average score") +labs(caption="Source:Waves 2-8 of pairfam") + geom_text(aes(label=sprintf('%.1f', meanconduct)), vjust=-0.75) 
+
+
+f6
+```
+
+###Distribution of adolescent wellbeing by gender
+
+Figures 8 and 9 disaggregate the scores on the Emotional symptoms scale and the Conduct problems scale respectively, by gender. It is interesting to note that on the Emotional symptoms scale, adolescent girls obtain higher scores across all the waves than adolescent boys, while the picture is the opposite on the Conduct problems scale, where adolescent boys report higher scores across all the waves. This indicates a gender-specific effects across different measures of wellbeing.
+
+\newpage
+```{r, echo=FALSE,fig.align="left", fig.pos="H", fig.cap="Distribution of average score on the Emotional symptoms scale across waves, disaggregated by gender", out.width="350px"}
+meancemotion1 <- analysis %>% 
+  group_by(wave, csex.f) %>% 
+  summarize(meancemotion = mean(cemotion1))
+
+f7 <- ggplot2::ggplot(meancemotion1, aes(as.factor(wave), meancemotion)) + geom_bar(aes(fill = csex.f), position = "dodge", stat="identity") + xlab("Wave") + ylab("Average score") + labs(caption="Source:Waves 2-8 of pairfam") + geom_text( aes(x = as.factor(wave), y = meancemotion, label = sprintf('%.1f',meancemotion), group = csex.f), position = position_dodge(width = 1), vjust = -0.5, size = 4) + scale_fill_manual("csex.f", values = c("Boy" = "paleturquoise4", "Girl" = "palevioletred3"))
+
+f7
+```
+
+```{r, echo=FALSE,fig.align="left", fig.pos="H", fig.cap="Distribution of average score on the Conduct problems scale across waves, disaggregated by gender", out.width="350px"}
+meancconduct1 <- analysis %>% 
+  group_by(wave, csex.f) %>% 
+  summarize(meanconduct = mean(cconduct1))
+
+f8 <- ggplot(meancconduct1, aes(as.factor(wave), meanconduct)) + geom_bar(aes(fill = csex.f), position = "dodge", stat="identity") + xlab("Wave") + ylab("Average score") + labs(caption="Source:Waves 2-8 of pairfam") + geom_text( aes(x = as.factor(wave), y = meanconduct, label = sprintf('%.1f',meanconduct), group = csex.f), position = position_dodge(width = 1), vjust = -0.5, size = 4) + scale_fill_manual("csex.f", values = c("Boy" = "paleturquoise4", "Girl" = "palevioletred3"))
+
+f8
+```
+
+```{r, echo=FALSE}
+boys <- analysis %>% group_by(csex.f) %>% summarize(meancemotion=mean(cemotion1))
+girls <- analysis %>% group_by(csex.f) %>% summarize(meanconduct = mean(cconduct1))
+```
+
+Overall, adolescent boys report an average score of `r round(mean(data.matrix(boys[boys$csex.f=="Boy","meancemotion"])),2)` and adolescent girls report an average score of `r round(mean(data.matrix(boys[boys$csex.f=="Girl","meancemotion"])),2)` on the Emotional symptoms scale. On the Conduct problems scale, adolescent boys report an average score of `r round(mean(data.matrix(girls[girls$csex.f=="Boy","meanconduct"])),2)`, while adolescent girls report a score of `r round(mean(data.matrix(girls[girls$csex.f=="Girl","meanconduct"])),2)`.
+
+
+###Distribution of adolescent wellbeing by anchor's marital status
+
+Figures 10 and 11 disaggregate the scores on the Emotional symptoms scale and the Conduct problems scale respectively, by anchor's marital status. Here, adolescents whose parents report being not married are shown to obtain higher scores on average on the Conduct problems scale, across all the waves. 
+
+```{r, echo=FALSE,fig.align="left", fig.pos="H", fig.cap="Distribution of average scores on the Emotional symptoms scale, disaggregated by marital status"}
+meancemotion1 <- analysis %>% 
+  group_by(wave, anchor_mardummy.f) %>% 
+  summarize(meancemotion = mean(cemotion1))
+
+f9 <- ggplot(meancemotion1, aes(as.factor(wave), meancemotion)) + geom_bar(aes(fill = anchor_mardummy.f), position = "dodge", stat="identity") + xlab("Wave") + ylab("Average score") + labs(caption="Source:Waves 2-8 of pairfam") + geom_text( aes(x = as.factor(wave), y = meancemotion, label = sprintf('%.1f',meancemotion), group = anchor_mardummy.f), position = position_dodge(width = 1), vjust = -0.5, size = 4) + scale_fill_manual("anchor_mardummy.f", values = c("Married" = "lightskyblue3", "Not Married" = "violetred3")) 
+
+f9
+```
+
+```{r, echo=FALSE,fig.align="left", fig.pos="H", fig.cap="Distribution of average scores on the Conduct problems scale, disaggregated by marital status"}
+meancconduct1 <- analysis %>% 
+  group_by(wave, anchor_mardummy.f) %>% 
+  summarize(meanconduct = mean(cconduct1))
+
+f10 <- ggplot(meancconduct1, aes(as.factor(wave), meanconduct)) + geom_bar(aes(fill = anchor_mardummy.f), position = "dodge", stat="identity") + xlab("Wave") + ylab("Average score") + labs(caption="Source:Waves 2-8 of pairfam") + geom_text( aes(x = as.factor(wave), y = meanconduct, label = sprintf('%.1f',meanconduct), group = anchor_mardummy.f), position = position_dodge(width = 1), vjust = -0.5, size = 4) + scale_fill_manual("anchor_mardummy.f", values = c("Married" = "lightskyblue3", "Not Married" = "violetred3")) 
+
+f10
+ggsave("f10.png")
+```
+
+The descriptive analyses points to a difference in self-reported adolescent wellbeing scores by adolescent gender and anchor parent's marital status, across the waves with **adolescent boys reporting a higher score on the Conduct problems scale, and adolescent girls reporting a higher score on the Emotional symptoms scale. Moreover, adolescents whose anchor parents report being unmarried are shown to have higher scores on the Conduct problems scale, across all waves**. The next section conducts a regression analysis to establish whether there exists a statistically significant relationship between parent's marital status and adolescent wellbeing, mediated by adolescent gender.
+
+
+##Multivariate analysis
+
+Table 4 presents the output of the estimated regression models The first two models are estimated using Pooled OLS, while the remaining are estimated using the Fixed Effects technique. 
+
+###Pooled OLS regressions
+
+In Models 1 and 2, adolescent gender is highly significant (at the 1% level). This means that compared to adolescent boys, adolescent girls on average report higher scores on the Emotional symptoms scale by 0.44 units and lower on the Conduct problems scale by 0.29 units, everything else remaining constant. Older adolescents are also more likely to report higher scores on both scales, with a 1 unit change in birth year resulting in a 0.05 unit increase on the Emotional symptoms scale and a 0.04 unit increase in the Conduct problems scale, everything else remaining constant.
+
+Anchor parent's reported satisfaction with household income is also a significant predictor of adolescent wellbeing, with a unit increase in reported satisfaction result in a 0.11 units decrease on the Emotional symptoms scale and a 0.07 unit decrease on the Conduct problems scale, everything else remaining constant. Further, adolescents whose parents are divorced report a 0.22 unit higher score on the Conduct problems scale than adolescents whose parents are married.
+
+```{r, include=FALSE, warning=FALSE}
+
+analysis$anchor_ethni.f <- relevel(analysis$anchor_ethni.f, ref="Other non-German background")
+analysis$anchor_marstat.f <- relevel(analysis$anchor_marstat.f, ref="Married/civil union")
+
+
+
+###Pooled OLS
+model1 <- plm::plm(cemotion1 ~ csex.f + cdoby.f + anchor_inc28.f + anchor_marstat.f + anchor_ethni.f + anchor_yeduc + anchor_eastwest.f, data=analysis, index=c("cid","wave"),  model="pooling")
+summary(model1)
+
+
+##Clustered standard errors
+reg1 <- coeftest(model1, vcov=vcovHC(model1,cluster="group"))
+
+
+model2 <- plm::plm(cconduct1 ~ csex.f + cdoby.f + anchor_inc28.f + anchor_marstat.f + anchor_ethni.f + anchor_yeduc + anchor_eastwest.f, data=analysis, index=c("cid","wave"),  model="pooling")
+summary(model2)
+
+##Clustered standard errors
+reg2 <- coeftest(model2, vcov=vcovHC(model2,cluster="group"))
+
+###Fixed effects models - overall
+model3 <- plm::plm(cemotion1 ~ csex.f + cdoby.f + anchor_inc28.f + anchor_mardummy.f + anchor_ethni.f + anchor_yeduc + anchor_eastwest.f, data=analysis, index=c("cid","wave"), model="within")
+summary(model3)
+
+reg3 <- coeftest(model3, vcov=vcovHC(model3,cluster="group"))
+
+
+model4 <- plm::plm(cconduct1 ~ csex.f + cdoby.f + anchor_inc28.f + anchor_mardummy.f + anchor_ethni.f + anchor_yeduc + anchor_eastwest.f, data=analysis, index=c("cid","wave"), model="within")
+summary(model4)
+
+reg4 <- coeftest(model4, vcov=vcovHC(model4,cluster="group"))
+
+
+###Fixed effects models - separate models by gender
+analysismale <- subset(analysis, analysis$csex=="1 Junge")
+
+model5 <- plm::plm(cemotion1 ~  cdoby.f + anchor_inc28.f + anchor_mardummy.f + anchor_ethni.f + anchor_yeduc + anchor_eastwest.f, data=analysismale, index=c("cid","wave"), model="within")
+summary(model5)
+
+reg5 <- coeftest(model5, vcov=vcovHC(model5,cluster="group"))
+
+
+model6 <- plm::plm(cconduct1 ~ cdoby.f + anchor_inc28.f + anchor_mardummy.f + anchor_ethni.f + anchor_yeduc + anchor_eastwest.f, data=analysismale, index=c("cid","wave"), model="within")
+summary(model6)
+
+reg6 <- coeftest(model6, vcov=vcovHC(model6,cluster="group"))
+
+
+analysisfemale <- subset(analysis, !(analysis$csex=="1 Junge"))
+
+model7 <- plm::plm(cemotion1 ~  cdoby.f + anchor_inc28.f + anchor_mardummy.f + anchor_ethni.f + anchor_yeduc + anchor_eastwest.f, data=analysisfemale, index=c("cid","wave"), model="within")
+summary(model7)
+
+reg7 <- coeftest(model7, vcov=vcovHC(model7,cluster="group"))
+
+
+model8 <- plm::plm(cemotion1 ~  cdoby.f + anchor_inc28.f + anchor_mardummy.f + anchor_ethni.f + anchor_yeduc + anchor_eastwest.f, data=analysisfemale, index=c("cid","wave"), model="within")
+summary(model8)
+
+reg8 <- coeftest(model8, vcov=vcovHC(model8,cluster="group"))
+
+stargazer::stargazer(reg1, reg2, reg3, reg4, reg5, reg6, reg7, reg8, title="Table 4: Results of the regression analysis", no.space=TRUE, column.labels=c("cemotion1","cconduct1","cconduct1","cconduct1","cemotion1","cemotion1","cconduct1","cconduct1"), align=TRUE, column.sep.width = "0.5pt",font.size="small", out="reg.tex")
+
+```
+\newpage
+
+\begin{landscape}
+\begin{table}[!htbp] \centering 
+  \caption{Results of the regression analysis} 
+  \label{} 
+\footnotesize 
+\begin{tabular}{@{\extracolsep{0.5pt}}lD{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} } 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{8}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-9} 
+\\[-1.8ex] & \multicolumn{8}{c}{ } \\ 
+ & \multicolumn{1}{c}{cemotion1} & \multicolumn{1}{c}{cconduct1} & \multicolumn{1}{c}{cemotion1} & \multicolumn{1}{c}{cconduct1} & \multicolumn{1}{c}{cemotion1} & \multicolumn{1}{c}{cemotion1} & \multicolumn{1}{c}{cconduct1} & \multicolumn{1}{c}{cconduct1} \\ 
+\\[-1.8ex] & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)} & \multicolumn{1}{c}{(4)} & \multicolumn{1}{c}{(5)} & \multicolumn{1}{c}{(6)} & \multicolumn{1}{c}{(7)} & \multicolumn{1}{c}{(8)}\\ 
+\hline \\[-1.8ex] 
+ csex.fGirl & 0.438^{***} & -0.291^{***} & 0.739^{***} & 0.429^{***} &  &  &  &  \\ 
+  & (0.067) & (0.047) & (0.172) & (0.152) &  &  &  &  \\ 
+  cdoby.f & 0.055^{***} & 0.046^{***} &  &  &  &  &  &  \\ 
+  & (0.012) & (0.009) &  &  &  &  &  &  \\ 
+  anchor\_inc28.f & -0.112^{***} & -0.071^{***} & -0.013 & -0.009 & -0.028 & -0.011 & 0.002 & 0.002 \\ 
+  & (0.013) & (0.009) & (0.014) & (0.010) & (0.019) & (0.016) & (0.021) & (0.021) \\ 
+  anchor\_marstat.fDivorced & 0.166 & 0.221^{**} &  &  &  &  &  &  \\ 
+  & (0.109) & (0.087) &  &  &  &  &  &  \\ 
+  anchor\_marstat.fNever married & 0.073 & 0.078 &  &  &  &  &  &  \\ 
+  & (0.117) & (0.078) &  &  &  &  &  &  \\ 
+  anchor\_marstat.fWidowed & 0.244 & 0.348 &  &  &  &  &  &  \\ 
+  & (0.490) & (0.304) &  &  &  &  &  &  \\ 
+  anchor\_ethni.fAussiedler & -0.150 & -0.099 &  &  &  &  &  &  \\ 
+  & (0.170) & (0.138) &  &  &  &  &  &  \\ 
+  anchor\_ethni.fGerman native & 0.020 & 0.104 &  &  &  &  &  &  \\ 
+  & (0.112) & (0.077) &  &  &  &  &  &  \\ 
+  anchor\_ethni.fHalf German & -0.126 & 0.157 &  &  &  &  &  &  \\ 
+  & (0.155) & (0.122) &  &  &  &  &  &  \\ 
+  anchor\_ethni.fTurkish background & -0.054 & 0.0002 &  &  &  &  &  &  \\ 
+  & (0.215) & (0.133) &  &  &  &  &  &  \\ 
+  anchor\_mardummy.fNot Married &  &  & -0.041 & -0.075 & 0.138 & -0.005 & -0.152 & -0.152 \\ 
+  &  &  & (0.169) & (0.152) & (0.244) & (0.183) & (0.226) & (0.226) \\ 
+  anchor\_yeduc & -0.050^{***} & -0.027^{***} & -0.123 & -0.166^{**} & -0.111 & -0.289^{**} & -0.126 & -0.126 \\ 
+  & (0.012) & (0.008) & (0.102) & (0.069) & (0.149) & (0.126) & (0.130) & (0.130) \\ 
+  anchor\_eastwest.fWest & -0.029 & -0.002 & -0.943 & -0.305 & -0.839 & -0.641 & -1.059 & -1.059 \\ 
+  & (0.081) & (0.055) & (0.604) & (0.466) & (0.794) & (0.654) & (0.903) & (0.903) \\ 
+  Constant & -105.801^{***} & -89.929^{***} &  &  &  &  &  &  \\ 
+  & (24.171) & (17.720) &  &  &  &  &  &  \\ 
+ \hline \\[-1.8ex] 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{8}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+ 
+
+\end{landscape}
+
+\newpage
+
+
+###Fixed effects regressions
+
+In Model 3 which estimates a fixed effect model for the overall sample, adolescent gender is again a significant predictor of wellbeing. Compared to adolescent boys, adolescent girls report a higher score on the Emotional symptoms scale by 0.73 units. In Model 4, adolescent girls are shown to report a higher score on the Conduct problems scale than boys, by 0.42 units. Greater level of education of the anchor parent is shown to reduce self-reported scores on the Conduct problems scale across gender, with a unit increase in years of education, resulting in a 0.16 unit decrease in score on the Conduct problems scale. 
+
+
+#V. Conclusion
+
+The results from the analysis reject the first null hypothesis H0: Parental divorce has no significant impact on adolescent wellbeing. From the pooled OLS regressions, adolescents whose anchor parents are divorced report a 0.22 unit higher score on the Conduct problems scale when compared to adolescents whose anchor parents are married (significant at the 5% level).
+
+The results from the analysis also reject the second null hypothesis H0: There are no significant differences in adolescent wellbeing by gender, after controlling for parent's marital status. When compared to adolescent boys, adolescent girls on average report higher scores on the Emotional symptoms scale by 0.44 units and lower on the Conduct problems scale by 0.29 units, everything else remaining constant. These results are significant at the  level. On the whole, adolescent girls are more likely to report borderline to abnormal symptoms on the Emotional symptoms scale, while adolescent boys are more likely to report borderline to abnormal symptoms on the Conduct problems scale, as previously shown in the Descriptive analysis section of the thesis.
+
+Anchor parents's satisfaction with the household'ss financial situation is also a significant predictor of adolescent behavior, with a unit increase in reported satisfaction resulting in a 0.11 unit decrease in the Emotional symptoms scale and a 0.07 unit decrease in the Conduct problems scale (both significant at the 1% level). This is consistent with current literature [@amatoandcheadle2003, @amato2014 and @thomsonandmclanahan1994] and point to a multifaceted relationship between parent's marital status, household income and adolescent wellbeing  -- in that single parent households are more likely to have access to fewer economic resources than households with two parents, and thereby negatively impact adolescent wellbeing. In this regard, it becomes more important to focus on the stability of parent's marital status over time, that is, fewer disruptions in the adolescent's external environment in terms of changing residences, schools or meeting parents' new romantic partners, is more likely to be positively associated with adolescent wellbeing than the parent's marital status at a point in time. 
+
+
+#VI. Discussion
+
+According to OECD reports, despite the high relative spending of Germany on children when compared to other countries, it still lags behind on a number of important child outcomes such as poverty, local environmental conditions, bullying and smoking. In  particular, the proportion of German children who obtain the recommended amount of daily physical activity is 17%, 3.2 percentage points lower than the OECD average. The rates of smoking among German youth is 19%, 2 percentage points higher than the OECD average, and rates of bullying reported by German school students is at 17%, 3 percentage points higher than the OECD average [@oecd2009].
+
+These child and adolescent outcomes are significantly related to measures of wellbeing, and thus policy measures targeted at enhancing adolescent wellbeing could potentially improve performance on other related outcomes as well. Some of the main policy implications from my research are described in the next section, with specific examples within the German context. 
+
+
+##Policy implications from the study
+
+**1. Need for gender-targeted adolescent mental health programmes**  
+In this analysis, German adolescent girls report to higher scores on average on the Emotional symptoms scale than German adolescent boys. Further the proportion of girls reporting borderline to abnormal symptoms on the Emotional symptoms scale of wellbeing is higher than that of boys, across all the waves. 
+
+Current research in psychological well-being also points to the fact that girls are more likely to show symptoms of depression, anxiety and emotional distress than boys (see for example @visani2011). A UNICEF report in 2017 also identifies the presence of gendered drivers of poor adolescent mental health. For instance, since the year 2000, self-harm has been ranked as the leading cause for death among adolescent girls between the ages 15-19 across the world, with particularly high rates of incidence in South and Southeast Asia [@unicef2017].
+
+Understanding the socio-cultural factors that contribute towards gendered differences in adolescent wellbeing is important for developing suitable policy interventions to tackle the same. In particular, expectations regarding ideal body images and gender roles, which is often propagated by the media, can intensify during the period of adolescence and lead to depression. Exposure to gender based discrimination, violence and limitations in individual freedoms can further contribute towards adolescent depression [@unicef2017].
+
+In Germany, school-based life skills programmes are one of the main ways to improve mental health and wellbeing and correspondingly reduce substance abuse among adolescents. Programmes such as "Fit und stark fuer Leben", "Erwachsen werden" and the "Buddy-Projekt" provide training in social and communication skills, resisting peer pressure and promoting healthy behavior and enhanced problem solving skills [@who2008]. Incorporating gender-specific modules in these programmes can help target gender based mental health issues better.
+
+&nbsp;
+
+**2. Policy outreach for adolescents belonging to single-parent households**  
+In Germany, one in five families are single-parent households with underage children, which translates to 1.6 million single parents with 2.3 million children [@local2017]. In terms of parents' living arrangements, 9.7% of women (between the ages of 27 and 59) were lone parents in 2011, compared to 1.4% of men belonging to the same age group [@destatis2012]. Single-parent households thus predominantly consist of a mother and her child, which needs to be adequately accounted for in welfare policies.
+
+More than a third of these single mothers also have a disposable income of less than 1,300 euros each month, which has led to political debates about increasing the minimum wage and child support subsidies awarded by the government [@local20172]. Currently, a child benefits payment structure (Kindergeld in German) is in place, where a parent can receive 184 euros per month for the first and second child, and 190 euros per month for the third child. Single parents are also entitled to a 1,308 euro annual deduction as allowance from their taxable income [@scheller2015], but are disadvantaged by the lack of child maintenance payments from their partner [@lenze2014].
+
+Thus, special policy interventions can be tailored towards improving adolescent wellbeing in single-parent and economically poorer households. Such an intervention can aim at addressing issues of adolescent loneliness (where poorer children are often more socially isolated due to lack of economic resources for participating in activities with friends, see @hjalmarsson2015) and enhancing social participation. Policy interventions providing additional mentoring support to poorer adolescents can help improve their educational outcomes, self-esteem and overall measures of wellbeing. 
+
+&nbsp;
+
+**3. Developing multidimensional approaches to adolescent wellbeing **
+
+The results from the analysis also point to the importance of multidimensional approach to adolescent wellbeing, particularly in terms of testing programme interventions and outcomes. The SDQ for example consists of five scales, which can further be categorised into "internalizing problems" (emotional symptoms + peer problems scales), "externalizing problems"(conduct problems + hyperactivity scales) and the prosocial scale [@sdq2018]. As shown in the analysis, the scores on each scale differ according to adolescent gender, age groups, socio-economic status and potentially other factors such as having a migration background. In this regard, examining both an overall score of adolescent wellbeing as well as disaggregated scores is useful to accurately capture differences within adolescent groups and across times.
+
+A disaggregated approach to adolescent wellbeing can also help further fine-tune policy interventions. For instance, the analysis shows that on average, adolescent girls obtain higher scores on the Emotional symptoms scale, while adolescent boys obtain higher scores on the Conduct problems scale. School based life skills programmes can incorporate this difference into account by developing more gender-specific modules on emotional wellbeing and improving social conduct.
+
+Further, evaluation of such policy interventions should triangulate measures of adolescent wellbeing, in terms of examining measures such as educational performance, adolescent participation in extracurricular and community activities and parent and teacher reported scores of adolescent well-being, with self-reported scores. This can help build a more comprehensive picture of overall wellbeing, as well as address the potential issues of over-reporting or under-reporting wellbeing. Evaluations of policy interventions may take the form of a difference-in-difference approach, where adolescent wellbeing is the outcome, and changes in the outcome is attributable to the introduction of a particular intervention programme. Developing randomized controlled trials (RCTs) of interventions, where a particular programme is randomly implemented in one school district and the outcomes of this district is compared to the outcomes of a control group can also help accurately establish causality between the introduction of policy interventions and adolescent wellbeing.
+
+&nbsp;
+
+In this analysis, I have used adolescent reported scores on wellbeing as the main outcome variable. Such an analysis is not without its limitations, particularly in the case of over or under reporting individual feelings. A more effective approach would be to combine self-reported scores of individual wellbeing with parent and teacher reported scores, and examine the variation in these measures.
+
+With the large-scale migration of refugees in Europe, and particularly Germany, since 2015, it would be interesting to extend the analysis to examine adolescent wellbeing among assimilating migrant groups, and the unique challenges they face when compared to native Germans. A future topic of research for the future would be the effect of same-sex parenting on adolescent wellbeing, particularly with the legalizing of same-sex marriages in Germany as of 2017 [@eddy2017].
+
+
+
+#References
+
+<div id="refs"></div>
+
+
+\newpage
+
+#Appendix
+
+##Data cleaning and recoding of variables
+
+```{r, eval=FALSE}
+##Dropping missing values
+
+analysis <- subset(analysis, !(analysis$anchor_relstat==-7))
+analysis <- subset(analysis, !(analysis$anchor_marstat==-7))
+analysis <- subset(analysis, !(analysis$anchor_marstat==-3))
+
+analysis <- subset(analysis, !(analysis$anchor_ethni==-7)) 
+analysis <- subset(analysis, !(analysis$anchor_inc28==-2)) 
+analysis <- subset(analysis, !(analysis$anchor_inc28==-1)) 
+analysis <- subset(analysis, !(analysis$anchor_yeduc<0)) 
+
+analysis <- subset(analysis, !(analysis$cemotion1<0)) 
+analysis <- subset(analysis, !(analysis$cconduct1<0)) 
+
+###Recoding waves
+analysis$wave[analysis$wave=="2 2009/10"] <- 2
+analysis$wave[analysis$wave=="3 2010/11"] <- 3
+analysis$wave[analysis$wave=="4 2011/12"] <- 4
+analysis$wave[analysis$wave=="5 2012/13"] <- 5
+analysis$wave[analysis$wave=="6 2013/14"] <- 6
+analysis$wave[analysis$wave=="7 2014/15"] <- 7
+analysis$wave[analysis$wave=="8 2015/16"] <- 8
+
+analysis$wave <- destring(analysis$wave)
+
+##Recoding relationship status
+analysis$anchor_relstat[analysis$anchor_relstat==1] <- "Never married Single"
+analysis$anchor_relstat[analysis$anchor_relstat==2] <- "Never married LAT"
+analysis$anchor_relstat[analysis$anchor_relstat==3] <- "Never married Cohab"
+analysis$anchor_relstat[analysis$anchor_relstat==4] <- "Married"
+analysis$anchor_relstat[analysis$anchor_relstat==5] <- "Married"
+analysis$anchor_relstat[analysis$anchor_relstat==6] <- "Divorced"
+analysis$anchor_relstat[analysis$anchor_relstat==7] <- "Divorced"
+analysis$anchor_relstat[analysis$anchor_relstat==8] <- "Divorced"
+analysis$anchor_relstat[analysis$anchor_relstat==9] <- "Widowed"
+analysis$anchor_relstat[analysis$anchor_relstat==10] <- "Widowed"
+analysis$anchor_relstat[analysis$anchor_relstat==11] <- "Widowed"
+
+analysis$anchor_marstat[analysis$anchor_marstat==1] <- "Never married"
+analysis$anchor_marstat[analysis$anchor_marstat==2] <- "Married/civil union"
+analysis$anchor_marstat[analysis$anchor_marstat==3] <- "Divorced"
+analysis$anchor_marstat[analysis$anchor_marstat==4] <- "Widowed"
+
+analysis$anchor_mardummy[analysis$anchor_marstat=="Married/civil union"] <- 
+  "Married"
+analysis$anchor_mardummy[!analysis$anchor_marstat=="Married/civil union"] <- 
+  "Not Married"
+
+##Recoding anchor main residence as East and West Germany
+
+analysis$anchor_ehc27p1i2[analysis$anchor_ehc27p1i2==10] <- "East"
+analysis$anchor_ehc27p1i2[analysis$anchor_ehc27p1i2==11] <- "East"
+analysis$anchor_ehc27p1i2[analysis$anchor_ehc27p1i2==12] <- "East"
+analysis$anchor_ehc27p1i2[analysis$anchor_ehc27p1i2==13] <- "East"
+analysis$anchor_ehc27p1i2[analysis$anchor_ehc27p1i2==15] <- "East"
+
+analysis$anchor_ehc27p1i2[!analysis$anchor_ehc27p1i2=="East"] <- "West"
+
+##Recoding anchor ethnicity
+analysis$anchor_ethni[analysis$anchor_ethni==1] <- "German native"
+analysis$anchor_ethni[analysis$anchor_ethni==2] <- 
+  "Ethnic German immigrant (Aussiedler)"
+analysis$anchor_ethni[analysis$anchor_ethni==3] <- "Half German"
+analysis$anchor_ethni[analysis$anchor_ethni==4] <- "Turkish background"
+analysis$anchor_ethni[analysis$anchor_ethni==5] <- 
+  "Other non-German background"
+
+##Recoding adolescent gender
+analysis$csex.f[analysis$csex=="1 Junge"] <- "Boy"
+analysis$csex.f[!analysis$csex=="1 Junge"] <- "Girl"
+```
+
+##Strengths and Difficulties Questionnaire
+
+The next page contains the SDQ questionnaire administered to 11-17 year olds and the scoring supplement, based on @goodman1997, @sdqscoring2016 and @sdq2018

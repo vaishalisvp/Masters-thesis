@@ -44,11 +44,11 @@ library(kableExtra)
 library(qwraps2)
 options(qwraps2_markup = 'markdown')
 
-#analysis <- read.csv("C:/Users/169435/Dropbox/Hertie School of Governance/Semester 4/Thesis/Data/analysis.csv")
+#analysis <- read.csv("./Dropbox/Hertie School of Governance/Semester 4/Thesis/Data/analysis.csv")
 
-analysis <-read.csv("C:/Users/WINDOWS-PC/Dropbox/Hertie School of Governance/Semester 4/Thesis/Data/analysis.csv")
+analysis <-read.csv("./Dropbox/Hertie School of Governance/Semester 4/Thesis/Data/analysis.csv")
 
-#wordcountaddin::text_stats("C:/Users/WINDOWS-PC/Dropbox/Hertie School of Governance/Semester 4/Thesis/Code/Thesis_v1.Rmd")
+#wordcountaddin::text_stats("./Dropbox/Hertie School of Governance/Semester 4/Thesis/Code/Thesis_v1.Rmd")
 
 ```
 
